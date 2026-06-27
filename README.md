@@ -4,8 +4,6 @@
 
 DGS es una herramienta web didáctica pensada para la facultad. Los alumnos construyen algoritmos conectando bloques en un lienzo visual y, en tiempo real, ven el código C equivalente generado automáticamente. También pueden ejecutar el algoritmo directamente en el navegador, sin instalar nada.
 
-Todo corre del lado del cliente — sin servidor, sin base de datos, sin login.
-
 ---
 
 ## Cómo funciona
