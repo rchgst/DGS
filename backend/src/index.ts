@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import healthRoutes from './routes/health.routes';
+import { errorHandler } from './middlewares/errorHandler';
 
 // Load environment variables
 dotenv.config();
@@ -12,10 +14,11 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Basic route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'AlgoBlocks API is running' });
-});
+// API Routes
+app.use('/api', healthRoutes);
+
+// Error Handler Middleware
+app.use(errorHandler);
 
 // Start the server
 app.listen(port, () => {
