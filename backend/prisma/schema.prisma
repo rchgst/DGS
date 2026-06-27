@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  name      String?
+  password  String     // hashed
+  role      Role       @default(STUDENT)
+  projects  Project[]
+  progress  Progress[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  // Stores the algorithm's block arrangement in JSON format
+  blocksJson  String   
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Challenge {
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  difficulty  Difficulty @default(EASY)
+  // Input/output test cases for validating student code
+  testCases   String     // JSON structure
+  progress    Progress[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Progress {
+  id          String    @id @default(uuid())
+  userId      String
+  challengeId String
+  completed   Boolean   @default(false)
+  // Last submitted block layout
+  blocksJson  String?   
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, challengeId])
+}
