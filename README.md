@@ -13,12 +13,10 @@ El proyecto está organizado en un monorepo para facilitar la gestión simultán
 ```
 algoblocks/
 ├── frontend/             # Aplicación de cliente SPA (React + TypeScript + Vite)
-├── backend/              # Servidor API REST (Node.js + Express + TypeScript + Prisma)
-├── database/             # Archivos, scripts o esquemas de base de datos
+├── backend/              # Servidor API REST (Node.js + Express + TypeScript)
 ├── docs/                 # Documentación técnica, diagramas y minutas del proyecto
 ├── docker/               # Configuraciones adicionales de Docker
 ├── .github/              # Workflows de GitHub Actions para CI/CD
-├── docker-compose.yml    # Orquestación de base de datos local (PostgreSQL + pgAdmin)
 └── README.md             # Guía principal del proyecto (este archivo)
 ```
 
@@ -46,12 +44,8 @@ La aplicación web permite componer algoritmos usando **6 bloques principales**,
    * **React** (con **TypeScript** y **Vite**): Framework ágil, tipado y veloz.
    * **CSS Custom Properties (Vanilla CSS)**: Estilos personalizables sin dependencias externas complejas.
    * **React Flow** o **custom Canvas implementation**: Para construir el lienzo de arrastrar y soltar (drag-and-drop) de los bloques de manera responsiva y fluida.
-2. **Backend:**
-   * **Node.js** + **Express** (con **TypeScript**): Servidor backend robusto y escalable.
-   * **Prisma ORM**: Mapeo relacional de objetos de excelente tipado.
-3. **Base de Datos & Contenedores:**
-   * **PostgreSQL**: Base de datos relacional robusta.
-   * **Docker**: Para contenerizar la base de datos y herramientas de administración (`pgAdmin`).
+2. **Backend (API de apoyo):**
+   * **Node.js** + **Express** (con **TypeScript**): Servidor backend robusto y escalable para compartir código o servir desafíos preconfigurados.
 
 ---
 
@@ -59,17 +53,8 @@ La aplicación web permite componer algoritmos usando **6 bloques principales**,
 
 ### Requisitos previos
 * Node.js (v18+)
-* Docker & Docker Compose
 
-### 1. Iniciar Base de Datos local
-Levanta PostgreSQL y pgAdmin usando Docker Compose:
-```bash
-docker compose up -d
-```
-* **PostgreSQL:** `localhost:5432`
-* **pgAdmin:** `http://localhost:5050` (Usuario: `admin@algoblocks.com` | Contraseña: `admin`)
-
-### 2. Configurar y Arrancar el Backend
+### 1. Configurar y Arrancar el Backend
 1. Ve al directorio del backend:
    ```bash
    cd backend
@@ -78,17 +63,13 @@ docker compose up -d
    ```bash
    npm install
    ```
-3. Genera el cliente Prisma y ejecuta las migraciones:
-   ```bash
-   npx prisma generate
-   ```
-4. Inicia el servidor en modo desarrollo:
+3. Inicia el servidor en modo desarrollo:
    ```bash
    npm run dev
    ```
    *El servidor se ejecutará en: `http://localhost:3001`*
 
-### 3. Configurar y Arrancar el Frontend
+### 2. Configurar y Arrancar el Frontend
 1. Ve al directorio del frontend:
    ```bash
    cd ../frontend

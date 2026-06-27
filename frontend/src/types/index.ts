@@ -52,15 +52,6 @@ export type Block =
   | WhileBlock 
   | ForBlock;
 
-// Global state/context types
-export interface UserState {
-  id: string | null;
-  name: string | null;
-  email: string | null;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN' | null;
-  token: string | null;
-}
-
 export interface ExecutionState {
   isRunning: boolean;
   isPaused: boolean;
