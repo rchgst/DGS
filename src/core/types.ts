@@ -1,4 +1,4 @@
-export type BlockType = 'input' | 'output' | 'assignment' | 'alternative' | 'while' | 'for';
+export type BlockType = 'input' | 'output' | 'assignment' | 'if-else' | 'while' | 'for';
 
 export interface BaseBlock {
   id: string;
@@ -12,8 +12,7 @@ export interface InputBlock extends BaseBlock {
 
 export interface OutputBlock extends BaseBlock {
   type: 'output';
-  // Can be a variable name (x) or string literal ("hola") or an expression
-  expression: string; 
+  expression: string; // e.g. "x" or "\"hola\""
 }
 
 export interface AssignmentBlock extends BaseBlock {
@@ -22,8 +21,8 @@ export interface AssignmentBlock extends BaseBlock {
   expression: string; // e.g. "5" or "c + 1"
 }
 
-export interface AlternativeBlock extends BaseBlock {
-  type: 'alternative';
+export interface IfElseBlock extends BaseBlock {
+  type: 'if-else';
   condition: string; // e.g. "x > 4"
   trueBranch: Block[];
   falseBranch: Block[];
@@ -38,9 +37,8 @@ export interface WhileBlock extends BaseBlock {
 export interface ForBlock extends BaseBlock {
   type: 'for';
   variableName: string; // e.g. "i"
-  startValue: string; // e.g. "1" or "a"
-  endValue: string; // e.g. "10" or "b"
-  step?: string; // e.g. "1" (optional)
+  startValue: string; // e.g. "a" or "1"
+  endValue: string; // e.g. "b" or "10"
   body: Block[];
 }
 
@@ -48,16 +46,10 @@ export type Block =
   | InputBlock 
   | OutputBlock 
   | AssignmentBlock 
-  | AlternativeBlock 
+  | IfElseBlock 
   | WhileBlock 
   | ForBlock;
 
-export interface ExecutionState {
-  isRunning: boolean;
-  isPaused: boolean;
-  currentBlockId: string | null;
-  variables: Record<string, any>;
-  outputLog: string[];
-  inputRequired: boolean;
-  inputCallback: ((value: any) => void) | null;
+export interface Program {
+  blocks: Block[];
 }

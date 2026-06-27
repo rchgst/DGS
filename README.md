@@ -1,85 +1,91 @@
-# AlgoBlocks (DGS)
+# DGS
 
-> Construye las bases de tu futuro como programador bloque a bloque. Aprende la lógica de programación con las bases necesarias de todo lenguaje.
+> Construí la lógica de programación bloque a bloque, de forma visual y práctica.
 
-AlgoBlocks es una aplicación web interactiva diseñada para la facultad, cuyo objetivo es ayudar a los alumnos a asimilar y desarrollar la lógica de programación de una forma visual y práctica mediante la composición de diagramas de bloques.
+DGS es una herramienta web didáctica pensada para la facultad. Los alumnos construyen algoritmos conectando bloques en un lienzo visual y, en tiempo real, ven el código C equivalente generado automáticamente. También pueden ejecutar el algoritmo directamente en el navegador, sin instalar nada.
+
+Todo corre del lado del cliente — sin servidor, sin base de datos, sin login.
 
 ---
 
-## 🏗️ Estructura del Monorepo
+## Cómo funciona
+La interfaz tiene dos paneles: el lienzo a la izquierda y el código C a la derecha. Mientras el alumno conecta bloques, el código se actualiza solo. Al hacer clic en "Ejecutar", el algoritmo corre en una consola simulada dentro de la misma página.
 
-El proyecto está organizado en un monorepo para facilitar la gestión simultánea del cliente y del servidor:
+El sistema traduce el diagrama en dos pasos:
+1. **El parser** convierte los nodos y conexiones del lienzo en un AST (árbol de sintaxis abstracta) en TypeScript.
+2. **Los traductores** recorren ese árbol y generan código: uno produce C (para mostrar), el otro produce JavaScript (para ejecutar en el navegador de forma segura).
 
+---
+
+## Los 6 bloques
+Con estos bloques se puede representar cualquier algoritmo básico:
+
+| Bloque | Qué hace |
+| :--- | :--- |
+| **Input** | El usuario ingresa un valor en una variable |
+| **Output** | Muestra un valor o texto en pantalla |
+| **Asignación** | Crea o modifica una variable (x = 5, c = c + 1) |
+| **If-Else** | Bifurca el flujo según una condición |
+| **While** | Repite instrucciones mientras se cumpla una condición |
+| **For** | Itera desde un valor a hasta un valor b |
+
+---
+
+## Stack
+* **React + TypeScript + Vite** — base del proyecto
+* **@xyflow/react** — lienzo drag-and-drop con nodos y conexiones
+* **@monaco-editor/react** — panel de código con resaltado de sintaxis C
+* **js-interpreter** — intérprete JS sandboxed para ejecutar en el navegador
+* **lz-string** — compresión de diagramas en la URL para compartir sin registro
+
+---
+
+## Estructura del proyecto
 ```
-algoblocks/
-├── frontend/             # Aplicación de cliente SPA (React + TypeScript + Vite)
-├── backend/              # Servidor API REST (Node.js + Express + TypeScript)
-├── docs/                 # Documentación técnica, diagramas y minutas del proyecto
-├── docker/               # Configuraciones adicionales de Docker
-├── .github/              # Workflows de GitHub Actions para CI/CD
-└── README.md             # Guía principal del proyecto (este archivo)
+src/
+├── components/
+│   ├── Canvas.tsx           # Lienzo interactivo (React Flow)
+│   ├── Toolbox.tsx          # Barra lateral con los 6 bloques
+│   ├── CodeViewer.tsx       # Panel Monaco Editor (muestra el C)
+│   └── Console.tsx          # Terminal simulada
+│
+├── core/
+│   ├── types.ts             # Interfaces del AST
+│   ├── parser.ts            # React Flow → AST
+│   │
+│   ├── interpreter/
+│   │   └── runner.ts        # Orquesta js-interpreter
+│   │
+│   └── translators/
+│       ├── ILanguage.ts     # Interfaz base (patrón Strategy)
+│       ├── CLanguage.ts     # AST → C
+│       └── JSLanguage.ts    # AST → JS con tracking de bloque activo
+│
+├── hooks/
+│   ├── useParser.ts         # Dispara el parser cuando cambia el canvas
+│   └── useRunner.ts         # Controla el estado de ejecución
+│
+├── utils/
+│   └── share.ts             # Compresión/descompresión con lz-string
+│
+├── App.tsx                  # Layout principal y estado global
+└── main.tsx                 # Entrada de Vite
 ```
 
 ---
 
-## 🎨 Los 6 Elementos Lógicos (Bloques)
+## Cómo correrlo localmente
+### Requisitos: Node.js v18+
 
-La aplicación web permite componer algoritmos usando **6 bloques principales**, diseñados para emular las estructuras fundamentales de la programación:
-
-1. **Input (Entrada):** Permite al usuario ingresar un dato en una variable.
-   * *Ejemplo:* `|input: x|` (asigna el valor ingresado por teclado a `x`).
-2. **Output (Salida):** Muestra por pantalla el valor de una variable o una cadena literal.
-   * *Ejemplo:* `|output: x|` o `|output: "hola"|`.
-3. **Asignación:** Inicializa o cambia el valor de una variable con datos duros u operaciones.
-   * *Ejemplo:* `|asigna: x = 5|` o `|asigna: c = c + 1|`.
-4. **Alternativa (Condicional If-Else):** Bloque compuesto de dos niveles. Arriba se define la condición (por ejemplo `|x > 4|`) y debajo contiene dos secciones: `[Camino Verdadero]` y `[Camino Falso]`.
-5. **Ciclo Mientras (While Loop):** Estructura cíclica que ejecuta los bloques de su interior en loop mientras se cumpla la condición.
-6. **Ciclo Para (For Loop):** Estructura cíclica que ejecuta los bloques de su interior desde un límite inferior (a) hasta un límite superior (b).
+```bash
+git clone git@github.com:rchgst/DGS.git
+cd DGS
+pnpm install
+pnpm dev
+```
+La app queda disponible en `http://localhost:5173`.
 
 ---
 
-## 🛠️ Stack Tecnológico Propuesto
-
-1. **Frontend:**
-   * **React** (con **TypeScript** y **Vite**): Framework ágil, tipado y veloz.
-   * **CSS Custom Properties (Vanilla CSS)**: Estilos personalizables sin dependencias externas complejas.
-   * **React Flow** o **custom Canvas implementation**: Para construir el lienzo de arrastrar y soltar (drag-and-drop) de los bloques de manera responsiva y fluida.
-2. **Backend (API de apoyo):**
-   * **Node.js** + **Express** (con **TypeScript**): Servidor backend robusto y escalable para compartir código o servir desafíos preconfigurados.
-
----
-
-## 🚀 Guía de Inicio Rápido (Local)
-
-### Requisitos previos
-* Node.js (v18+)
-
-### 1. Configurar y Arrancar el Backend
-1. Ve al directorio del backend:
-   ```bash
-   cd backend
-   ```
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
-3. Inicia el servidor en modo desarrollo:
-   ```bash
-   npm run dev
-   ```
-   *El servidor se ejecutará en: `http://localhost:3001`*
-
-### 2. Configurar y Arrancar el Frontend
-1. Ve al directorio del frontend:
-   ```bash
-   cd ../frontend
-   ```
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
-3. Inicia el servidor de desarrollo Vite:
-   ```bash
-   npm run dev
-   ```
-   *La aplicación estará disponible en: `http://localhost:5173`*
+## Compartir diagramas
+No hay cuentas ni guardado en servidor. Cuando el alumno hace clic en "Compartir", el diagrama se comprime con `lz-string` y se codifica directo en la URL. Quien recibe el link ve el diagrama cargado automáticamente.
