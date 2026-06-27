@@ -41,3 +41,6 @@ lerna-debug.log*
 # OS-specific
 Thumbs.db
 ehthumbs.db
+
+# TypeScript cache
+*.tsbuildinfo
