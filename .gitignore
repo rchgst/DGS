@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.pnpm-store/
 jspm_packages/
 web_modules/
 
@@ -36,9 +37,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-# Docker database volume (if created locally)
-postgres_data/
 
 # OS-specific
 Thumbs.db
