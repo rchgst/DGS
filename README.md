@@ -87,3 +87,4 @@ La app queda disponible en `http://localhost:5173`.
 
 ## Compartir diagramas
 No hay cuentas ni guardado en servidor. Cuando el alumno hace clic en "Compartir", el diagrama se comprime con `lz-string` y se codifica directo en la URL. Quien recibe el link ve el diagrama cargado automáticamente.
+
