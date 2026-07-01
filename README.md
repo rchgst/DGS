@@ -1,6 +1,6 @@
 # DGS
 
-> Construí la lógica de programación bloque a bloque, de forma visual y práctica.
+> Construí tu lógica de programación bloque a bloque, de forma visual y práctica.
 
 DGS es una herramienta web didáctica pensada para la facultad. Los alumnos construyen algoritmos conectando bloques en un lienzo visual y, en tiempo real, ven el código C equivalente generado automáticamente. También pueden ejecutar el algoritmo directamente en el navegador, sin instalar nada.
 
