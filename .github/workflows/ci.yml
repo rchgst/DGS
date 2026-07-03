@@ -13,7 +13,6 @@ on:
       - dev
 
 jobs:
-  # Trabajo 1: Calidad del Código (Linting, TypeScript y Construcción)
   validate-code:
     name: Validar Código (Lint y Build)
     runs-on: ubuntu-latest
@@ -25,13 +24,13 @@ jobs:
       - name: Instalar pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9  # Especifica la versión de pnpm compatible con tu proyecto
+          version: 9
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm' # Cachea automáticamente las dependencias para que el CI corra ultra rápido
+          node-version: 20
+          cache: 'pnpm'
 
       - name: Instalar Dependencias
         run: pnpm install --frozen-lockfile
@@ -42,11 +41,10 @@ jobs:
       - name: Verificar Compilación (Build & TypeScript)
         run: pnpm build
 
-  # Trabajo 2: Verificación de Docker (Asegura que el contenedor compila correctamente)
   validate-docker:
     name: Validar Dockerfile
     runs-on: ubuntu-latest
-    needs: validate-code # Solo corre si la validación de código fue exitosa
+    needs: validate-code
 
     steps:
       - name: Descargar Código
@@ -60,6 +58,6 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: false # Solo compila, no sube la imagen en la etapa de CI
-          cache-from: type=gha # Utiliza caché de GitHub Actions para acelerar las builds
+          push: false
+          cache-from: type=gha
           cache-to: type=gha,mode=max
